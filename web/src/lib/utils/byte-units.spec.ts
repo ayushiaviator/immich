@@ -10,6 +10,14 @@ describe('getBytesWithUnit', () => {
     { bytes: 2 ** 30 - 1, expected: [1024, ByteUnit.MiB] },
     { bytes: 2 ** 30, expected: [1, ByteUnit.GiB] },
     { bytes: 2 ** 30 + 1, expected: [1, ByteUnit.GiB] },
+    // sizes at or past the largest known unit stay clamped to EiB
+    { bytes: 2 ** 60, expected: [1, ByteUnit.EiB] },
+    { bytes: 2 ** 70, expected: [1024, ByteUnit.EiB] },
+    // negative sizes keep their sign and still pick a sensible unit
+    { bytes: -1, expected: [-1, ByteUnit.B] },
+    { bytes: -(2 ** 30), expected: [-1, ByteUnit.GiB] },
+    // sub-byte values do not underflow past B
+    { bytes: 0.5, expected: [0.5, ByteUnit.B] },
   ];
   for (const { bytes, maxPrecision, expected } of tests) {
     it(`${bytes} should be split up in the factor ${expected[0]} and unit ${expected[1]}`, () => {

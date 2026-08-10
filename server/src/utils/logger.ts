@@ -18,8 +18,5 @@ export const onRequestError = (req: Request, error: Error, logger: LoggingReposi
     return;
   }
 
-  if (error instanceof Error) {
-    logger.error(`Unknown error: ${error}`, error?.stack);
-    return;
-  }
+  logger.error(`Unknown error: ${error}`, error?.stack);
 };

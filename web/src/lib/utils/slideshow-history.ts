@@ -19,7 +19,10 @@ export class SlideshowHistory {
   }
 
   next(): boolean {
-    if (this.index === this.history.length - 1) {
+    // Compare with `>=` rather than `===`: on an empty history the last index
+    // is -1, which the cursor never equals, so an equality check would let it
+    // advance past the end.
+    if (this.index >= this.history.length - 1) {
       return false;
     }
 
@@ -29,7 +32,7 @@ export class SlideshowHistory {
   }
 
   previous(): boolean {
-    if (this.index === 0) {
+    if (this.index <= 0) {
       return false;
     }
 

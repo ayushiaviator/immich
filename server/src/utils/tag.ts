@@ -3,11 +3,11 @@ import { TagRepository } from 'src/repositories/tag.repository';
 
 type UpsertRequest = { userId: string; tags: string[] };
 export const upsertTags = async (repository: TagRepository, { userId, tags }: UpsertRequest) => {
-  tags = [...new Set(tags)];
+  const uniqueTags = [...new Set(tags)];
 
   const results: Tag[] = [];
 
-  for (const tag of tags) {
+  for (const tag of uniqueTags) {
     const parts = tag.split('/').filter(Boolean);
     let parent: Tag | undefined;
 

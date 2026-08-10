@@ -21,7 +21,8 @@ const byteUnits = [ByteUnit.B, ByteUnit.KiB, ByteUnit.MiB, ByteUnit.GiB, ByteUni
  * @returns size (number) and unit (string)
  */
 export function getBytesWithUnit(bytes: number, maxPrecision = 1): [number, ByteUnit] {
-  const magnitude = Math.floor(Math.log(bytes === 0 ? 1 : bytes) / Math.log(1024));
+  const exponent = Math.floor(Math.log(Math.abs(bytes) || 1) / Math.log(1024));
+  const magnitude = Math.min(Math.max(exponent, 0), byteUnits.length - 1);
 
   return [Number((bytes / 1024 ** magnitude).toFixed(maxPrecision)), byteUnits[magnitude]];
 }
@@ -44,7 +45,7 @@ export function getByteUnitString(bytes: number, locale?: string, maxPrecision =
 }
 
 /**
- * Convert to bytes from on a specified unit.
+ * Convert a value in the specified unit to bytes.
  *
  * * `1, 'GiB'`, returns `1073741824` bytes
  *
@@ -59,11 +60,11 @@ export function convertToBytes(size: number, unit: ByteUnit): number {
 /**
  * Convert from bytes to a specified unit.
  *
- * * `11073741824, 'GiB'`, returns `1` GiB
+ * * `1073741824` bytes in `'GiB'`, returns `1`
  *
  * @param bytes value to be converted
  * @param unit unit to convert to
- * @returns bytes (number)
+ * @returns the size expressed in `unit` (number)
  */
 export function convertFromBytes(bytes: number, unit: ByteUnit): number {
   return bytes / 1024 ** byteUnits.indexOf(unit);

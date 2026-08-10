@@ -1,7 +1,10 @@
 import { isEqual, isPlainObject } from 'lodash';
 
 /**
- * Deeply clones and converts a class instance to a plain object.
+ * Converts a class instance into a plain object by deep cloning it.
+ *
+ * Note that inputs which are already plain objects are returned by reference
+ * rather than cloned, so the result must not be relied on as a defensive copy.
  */
 export function toPlainObject<T extends object>(obj: T): T {
   return isPlainObject(obj) ? obj : structuredClone(obj);

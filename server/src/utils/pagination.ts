@@ -10,7 +10,6 @@ export interface PaginationResult<T> {
 
 export function paginationHelper<Entity extends object>(items: Entity[], take: number): PaginationResult<Entity> {
   const hasNextPage = items.length > take;
-  items.splice(take);
 
-  return { items, hasNextPage };
+  return { items: items.slice(0, take), hasNextPage };
 }
